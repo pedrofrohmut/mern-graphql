@@ -1,27 +1,22 @@
-require("dotenv").config()
+require("dotenv").config();
 
-const mongoose = require("mongoose")
-const { ApolloServer, gql }  = require("apollo-server")
+// Dependency Imports
+const mongoose = require("mongoose");
+const { ApolloServer, gql } = require("apollo-server");
 
-const typeDefs = gql`
-  type Query {
-    sayHi: String!
-  }
-`
+// Relative Imports
+const typeDefs = require("./graphql/typeDefs");
+const resolvers = require("./graphql/resolvers");
 
-const resolvers = {
-  Query: {
-    sayHi: () => "Hello World"
-  }
-}
-
-const server = new ApolloServer({ typeDefs, resolvers })
-const port = process.env.PORT || 5000
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true })
+const server = new ApolloServer({ typeDefs, resolvers });
+const port = process.env.PORT || 5000;
+mongoose
+  .connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log("Mongo Connected")
-    return server.listen({ port })
+    console.log("Mongo Connected");
+    return server.listen({ port });
   })
   .then(({ url }) => {
-    console.log(`Server ready at ${url}`)
+    console.log(`Server ready at ${url}`);
   })
+  .catch(err => console.error(err));
