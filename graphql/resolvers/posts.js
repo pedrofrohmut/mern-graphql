@@ -33,7 +33,11 @@ module.exports = {
     createPost: async (parent, args, context, info) => {
       const { body } = args;
       const user = checkAuth(context);
-      console.log("USER", user);
+      if (body.trim() === "") {
+        throw new UserInputError("Empty comment", {
+          errors: { body: "Comment body must not be empty" }
+        });
+      }
       const newPost = new Post({
         body,
         user: user.id,
@@ -41,7 +45,6 @@ module.exports = {
         createdAt: new Date().toISOString()
       });
       const post = await newPost.save();
-      console.log("NEW POST", newPost, post);
       return post;
     },
     deletePost: async (_, args, context) => {
