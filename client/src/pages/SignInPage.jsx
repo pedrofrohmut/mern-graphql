@@ -1,10 +1,79 @@
-import React from "react"
-import { Container } from "semantic-ui-react"
+import React, { useState } from "react"
+import gql from "graphql-tag"
+import { useMutation } from "@apollo/react-hooks"
 
-const SignInPage = () => (
-  <Container>
-    <h1>Sign In Page</h1>
-  </Container>
-)
+import { Button, Container, Form } from "semantic-ui-react"
+
+const SIGN_IN_USER = gql`
+  mutation SignInUser($userName: String!, $password: String!) {
+    login(userName: $userName, password: $password) {
+      id
+      email
+      userName
+      token
+      createdAt
+    }
+  }
+`
+
+const INITIAL_FORM_DATA = {
+  userName: "",
+  password: ""
+}
+
+const SignInPage = () => {
+  const [data, setData] = useState(INITIAL_FORM_DATA)
+  const [errors, setErrors] = useState({})
+  const [signInUser, { loading }] = useMutation(SIGN_IN_USER, {
+    update: (proxy, result) => {
+      console.log(result)
+      setErrors({})
+    },
+    onError: err => {
+      setErrors(err.graphQLErrors[0].extensions.exception.errors)
+    },
+    variables: data
+  })
+  const handleSubmit = e => {
+    e.preventDefault()
+    signInUser()
+  }
+  return (
+    <Container>
+      <Form
+        onSubmit={handleSubmit}
+        noValidate
+        loading={loading}
+        style={{ margin: "0 auto", maxWidth: "400px" }}
+      >
+        <h1>Sign In User</h1>
+
+        <Form.Input
+          type="text"
+          label="User Name"
+          placeholder="inform the userName registered in this application"
+          name="userName"
+          value={data.userName}
+          onChange={e => setData({ ...data, userName: e.target.value })}
+          error={errors.userName}
+        />
+
+        <Form.Input
+          type="password"
+          label="Password"
+          placeholder="Inform your password for this account"
+          name="password"
+          value={data.password}
+          onChange={e => setData({ ...data, password: e.target.value })}
+          error={errors.password}
+        />
+
+        <Button type="submit" primary>
+          Sign In
+        </Button>
+      </Form>
+    </Container>
+  )
+}
 
 export default SignInPage

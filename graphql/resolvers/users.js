@@ -44,25 +44,22 @@ module.exports = {
       };
     },
     register: async (parent, args, context, info) => {
+      const { userName, email, password, confirmPassword } = args.registerInput;
+      // Validate user data
+      const { errors, isValid } = validateRegisterInput(userName, email, password, confirmPassword);
+      if (!isValid) {
+        throw new UserInputError("Errors", { errors });
+        return;
+      }
+      // Make sure user doesnt already exists
+      const user = await User.findOne({ userName });
+      if (user) {
+        throw new UserInputError("UserName taken", {
+          errors: { userName: "This userName is already taken" }
+        });
+        return;
+      }
       try {
-        const { userName, email, password, confirmPassword } = args.registerInput;
-        // Validate user data
-        const { errors, isValid } = validateRegisterInput(
-          userName,
-          email,
-          password,
-          confirmPassword
-        );
-        if (!isValid) {
-          throw new UserInputError("Errors", { errors });
-        }
-        // Make sure user doesnt already exists
-        const user = await User.findOne({ userName });
-        if (user) {
-          throw new UserInputError("UserName taken", {
-            errors: { userName: "This userName is already taken" }
-          });
-        }
         // Hash the password and create an auth token
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
