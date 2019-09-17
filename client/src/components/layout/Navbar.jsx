@@ -6,7 +6,7 @@ const Navbar = props => {
   const [activeItem, setActiveItem] = useState("")
   const handleItemClick = (e, { name }) => setActiveItem(name)
   return (
-    <Menu pointing secondary>
+    <Menu pointing size="large" secondary style={{ marginBottom: "3rem", opacity: "0.75" }}>
       <Container>
         <Menu.Item
           name="home"
