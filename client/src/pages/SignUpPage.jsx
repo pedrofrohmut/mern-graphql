@@ -35,7 +35,7 @@ const INITIAL_FORM_DATA = {
   confirmPassword: ""
 }
 
-const SignUpPage = () => {
+const SignUpPage = ({ history }) => {
   const [data, setData] = useState(INITIAL_FORM_DATA)
   const [errors, setErrors] = useState({})
   const [signUpUser, { loading }] = useMutation(SIGN_UP_USER, {
@@ -51,61 +51,61 @@ const SignUpPage = () => {
   const handleSubmit = e => {
     e.preventDefault()
     signUpUser()
+    history.push("/")
   }
   return (
     <Container>
-      <Form
-        onSubmit={handleSubmit}
-        noValidate
-        loading={loading}
-        style={{ margin: "0 auto", maxWidth: "400px" }}
-      >
-        <h1>Sign Up User</h1>
+      <div style={{ margin: "0 auto", maxWidth: "400px" }}>
+        <Form onSubmit={handleSubmit} noValidate loading={loading}>
+          <h1>Sign Up User</h1>
 
-        <Form.Input
-          type="text"
-          label="User Name"
-          placeholder="The username to identify yourself"
-          name="userName"
-          value={data.userName}
-          onChange={e => setData({ ...data, userName: e.target.value })}
-          error={errors.userName}
-        />
+          <Form.Input
+            type="text"
+            label="User Name"
+            placeholder="The username to identify yourself"
+            name="userName"
+            value={data.userName}
+            onChange={e => setData({ ...data, userName: e.target.value })}
+            error={errors.userName ? true : false}
+          />
 
-        <Form.Input
-          type="text"
-          label="E-mail"
-          placeholder="Inform an active e-mail"
-          name="email"
-          value={data.email}
-          onChange={e => setData({ ...data, email: e.target.value })}
-          error={errors.email}
-        />
+          <Form.Input
+            type="text"
+            label="E-mail"
+            placeholder="Inform an active e-mail"
+            name="email"
+            value={data.email}
+            onChange={e => setData({ ...data, email: e.target.value })}
+            error={errors.email ? true : false}
+          />
 
-        <Form.Input
-          type="password"
-          label="Password"
-          placeholder="Choose a secure password"
-          name="password"
-          value={data.password}
-          onChange={e => setData({ ...data, password: e.target.value })}
-          error={errors.password}
-        />
+          <Form.Input
+            type="password"
+            label="Password"
+            placeholder="Choose a secure password"
+            name="password"
+            value={data.password}
+            onChange={e => setData({ ...data, password: e.target.value })}
+            error={errors.password ? true : false}
+          />
 
-        <Form.Input
-          type="password"
-          label="Confirm Password"
-          placeholder="Retype your password"
-          name="confirmPassword"
-          value={data.confirmPassword}
-          onChange={e => setData({ ...data, confirmPassword: e.target.value })}
-          error={errors.confirmPassword}
-        />
+          <Form.Input
+            type="password"
+            label="Confirm Password"
+            placeholder="Retype your password"
+            name="confirmPassword"
+            value={data.confirmPassword}
+            onChange={e => setData({ ...data, confirmPassword: e.target.value })}
+            error={errors.confirmPassword ? true : false}
+          />
 
-        <Button type="submit" primary>
-          Sign Up
-        </Button>
-      </Form>
+          <Button type="submit" primary>
+            Sign Up
+          </Button>
+        </Form>
+
+        {Object.keys(errors).length > 0 && <Message error list={Object.values(errors)} />}
+      </div>
     </Container>
   )
 }
