@@ -1,6 +1,8 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import gql from "graphql-tag"
 import { useMutation } from "@apollo/react-hooks"
+
+import { AuthContext } from "../context/auth"
 
 import { Button, Container, Form, Message } from "semantic-ui-react"
 
@@ -22,11 +24,13 @@ const INITIAL_FORM_DATA = {
 }
 
 const SignInPage = ({ history }) => {
+  const context = useContext(AuthContext)
   const [data, setData] = useState(INITIAL_FORM_DATA)
   const [errors, setErrors] = useState({})
   const [signInUser, { loading }] = useMutation(SIGN_IN_USER, {
     update: (proxy, result) => {
-      console.log("Mutation Result", result)
+      const userData = result.data.login
+      context.signIn(userData)
       setErrors({})
     },
     onError: err => {

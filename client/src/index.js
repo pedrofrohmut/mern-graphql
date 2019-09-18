@@ -7,6 +7,8 @@ import { InMemoryCache } from "apollo-cache-inmemory"
 import { createHttpLink } from "apollo-link-http"
 import { ApolloProvider } from "@apollo/react-hooks"
 
+import { AuthProvider } from "./context/auth"
+
 import "semantic-ui-css/semantic.min.css"
 import "./index.css"
 
@@ -21,7 +23,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </ApolloProvider>,
   document.getElementById("root")
 )
