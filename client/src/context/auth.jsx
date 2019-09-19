@@ -5,11 +5,11 @@ const INITIAL_STATE = {
   user: null
 }
 
-const getAuthToken = () => localStorage.getItem("@MERNG/authToken")
+export const getAuthToken = () => localStorage.getItem("@MERNG/authToken")
 
-const setAuthToken = token => localStorage.setItem("@MERNG/authToken", token)
+export const setAuthToken = token => localStorage.setItem("@MERNG/authToken", token)
 
-const removeAuthToken = () => localStorage.removeItem("@MERNG/authToken")
+export const removeAuthToken = () => localStorage.removeItem("@MERNG/authToken")
 
 if (getAuthToken()) {
   const decodedToken = jwtDecode(getAuthToken())
