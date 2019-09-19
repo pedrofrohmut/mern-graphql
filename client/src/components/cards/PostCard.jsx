@@ -1,15 +1,17 @@
-import React from "react"
+import React, { useContext } from "react"
 import moment from "moment"
 import { Link } from "react-router-dom"
 
+import { AuthContext } from "../../context/auth"
+import LikeButton from "../buttons/LikeButton"
+
 import { Button, Card, Image } from "semantic-ui-react"
 
-const toggleLikePost = () => console.log("Like Post")
-
-const commentPost = () => console.log("Comment Post")
+const handleDelete = id => console.log("Delete Post, postId = ", id)
 
 const PostCard = ({ post }) => {
   const { body, createdAt, id, userName, likesCount, commentsCount, likes } = post
+  const { user } = useContext(AuthContext)
   return (
     <Card fluid>
       <Card.Content>
@@ -24,25 +26,34 @@ const PostCard = ({ post }) => {
           {body}
         </Card.Description>
       </Card.Content>
-      <Card.Content extra>
-        <Button
-          color="teal"
-          content=" "
-          icon="heart"
-          size="mini"
-          basic
-          label={{ basic: true, color: "teal", pointing: "left", content: likesCount }}
-          onClick={toggleLikePost}
+      <Card.Content extra style={{ opacity: "0.75" }}>
+        <LikeButton
+          postId={id}
+          likes={likes}
+          likesCount={likesCount}
+          userName={user ? user.userName : null}
         />
         <Button
           color="teal"
-          content=" "
+          content=""
           icon="comment"
           size="mini"
           basic
           label={{ basic: true, color: "teal", pointing: "left", content: commentsCount }}
-          onClick={commentPost}
+          as={Link}
+          to={`/posts/${id}`}
         />
+        {user && user.userName && user.userName === userName && (
+          <Button
+            color="orange"
+            content=""
+            icon="trash"
+            size="mini"
+            basic
+            label={{ basic: false, color: "orange", pointing: "left", content: "X" }}
+            onClick={() => handleDelete(id)}
+          />
+        )}
       </Card.Content>
     </Card>
   )

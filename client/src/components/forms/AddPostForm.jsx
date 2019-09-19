@@ -17,8 +17,6 @@ const AddPostForm = ({ history }) => {
       const data = proxy.readQuery({
         query
       })
-      // data.allPost = [result.data.createPost, ...data.allPost]
-      // proxy.writeQuery({ query: GET_ALL_POSTS, data })
       proxy.writeQuery({
         query,
         data: {
