@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 
 module.exports = context => {
   const authHeader = context.req.headers.authorization;
-  console.log("AUTH HEADER", authHeader);
   if (authHeader) {
     const token = authHeader.split("Bearer ")[1];
     if (token) {

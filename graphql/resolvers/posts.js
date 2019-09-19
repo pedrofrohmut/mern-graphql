@@ -35,7 +35,7 @@ module.exports = {
       const user = checkAuth(context);
       if (body.trim() === "") {
         throw new UserInputError("Empty comment", {
-          errors: { body: "Comment body must not be empty" }
+          errors: { body: "Post body must not be empty" }
         });
       }
       const newPost = new Post({
