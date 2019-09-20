@@ -23,6 +23,29 @@ export const GET_ALL_POSTS = gql`
   }
 `
 
+export const GET_POST_BY_ID = gql`
+  query GetPostById($postId: ID!) {
+    post(postId: $postId) {
+      id
+      body
+      userName
+      createdAt
+      comments {
+        id
+        body
+        userName
+        createdAt
+      }
+      commentsCount
+      likes {
+        id
+        userName
+      }
+      likesCount
+    }
+  }
+`
+
 export const ADD_POST = gql`
   mutation CreatePost($body: String!) {
     createPost(body: $body) {
@@ -42,6 +65,20 @@ export const ADD_POST = gql`
         createdAt
       }
       commentsCount
+    }
+  }
+`
+
+export const DELETE_POST = gql`
+  mutation DeletePost($postId: ID!) {
+    deletePost(postId: $postId)
+  }
+`
+
+export const DELETE_COMMENT = gql`
+  mutation DeleteComment($postId: ID!, $commentId: ID!) {
+    deleteComment(postId: $postId, commentId: $commentId) {
+      id
     }
   }
 `

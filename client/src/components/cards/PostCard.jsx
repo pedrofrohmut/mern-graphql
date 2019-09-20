@@ -4,10 +4,10 @@ import { Link } from "react-router-dom"
 
 import { AuthContext } from "../../context/auth"
 import LikeButton from "../buttons/LikeButton"
+import CommentButton from "../buttons/CommentButton"
+import DeleteButton from "../buttons/DeleteButton"
 
-import { Button, Card, Image } from "semantic-ui-react"
-
-const handleDelete = id => console.log("Delete Post, postId = ", id)
+import { Card, Image } from "semantic-ui-react"
 
 const PostCard = ({ post }) => {
   const { body, createdAt, id, userName, likesCount, commentsCount, likes } = post
@@ -22,7 +22,7 @@ const PostCard = ({ post }) => {
         />
         <Card.Header>{userName}</Card.Header>
         <Card.Meta>{moment(createdAt).fromNow(true)}</Card.Meta>
-        <Card.Description as={Link} to={`post/${id}`}>
+        <Card.Description as={Link} to={`posts/${id}`}>
           {body}
         </Card.Description>
       </Card.Content>
@@ -33,26 +33,9 @@ const PostCard = ({ post }) => {
           likesCount={likesCount}
           userName={user ? user.userName : null}
         />
-        <Button
-          color="teal"
-          content=""
-          icon="comment"
-          size="mini"
-          basic
-          label={{ basic: true, color: "teal", pointing: "left", content: commentsCount }}
-          as={Link}
-          to={`/posts/${id}`}
-        />
+        <CommentButton postId={id} commentsCount={commentsCount} />
         {user && user.userName && user.userName === userName && (
-          <Button
-            color="orange"
-            content=""
-            icon="trash"
-            size="mini"
-            basic
-            label={{ basic: false, color: "orange", pointing: "left", content: "X" }}
-            onClick={() => handleDelete(id)}
-          />
+          <DeleteButton postId={id} />
         )}
       </Card.Content>
     </Card>
