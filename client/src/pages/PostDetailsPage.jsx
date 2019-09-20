@@ -7,8 +7,9 @@ import { AuthContext } from "../context/auth"
 import LikeButton from "../components/buttons/LikeButton"
 import CommentButton from "../components/buttons/CommentButton"
 import DeleteButton from "../components/buttons/DeleteButton"
+import AddCommentForm from "../components/forms/AddCommentForm"
 
-import { Card, Container, Grid, Image } from "semantic-ui-react"
+import { Card, Container, Grid, Image, Transition } from "semantic-ui-react"
 
 const PostDetailsPage = ({ match }) => {
   const { postId } = match.params
@@ -64,22 +65,29 @@ const PostDetailsPage = ({ match }) => {
               </Card>
             </Grid.Column>
           </Grid.Row>
+          {user && (
+            <Grid.Row>
+              <AddCommentForm postId={postId} />
+            </Grid.Row>
+          )}
           {post.commentsCount > 0 && post.comments && (
             <Grid.Row>
-              {post.comments.map(comment => (
-                <Card fluid key={comment.id}>
-                  <Card.Content>
-                    <Card.Header>{comment.userName}</Card.Header>
-                    <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
-                    <Card.Description>{comment.body}</Card.Description>
-                  </Card.Content>
-                  {user && user.userName && user.userName === comment.userName && (
-                    <Card.Content extra>
-                      <DeleteButton postId={postId} commentId={comment.id} />
+              <Transition.Group duration={1200}>
+                {post.comments.map(comment => (
+                  <Card fluid key={comment.id}>
+                    <Card.Content>
+                      <Card.Header>{comment.userName}</Card.Header>
+                      <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
+                      <Card.Description>{comment.body}</Card.Description>
                     </Card.Content>
-                  )}
-                </Card>
-              ))}
+                    {user && user.userName && user.userName === comment.userName && (
+                      <Card.Content extra>
+                        <DeleteButton postId={postId} commentId={comment.id} />
+                      </Card.Content>
+                    )}
+                  </Card>
+                ))}
+              </Transition.Group>
             </Grid.Row>
           )}
         </Grid>

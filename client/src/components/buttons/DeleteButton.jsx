@@ -2,7 +2,8 @@ import React, { useState } from "react"
 import { withRouter } from "react-router-dom"
 import { useMutation } from "@apollo/react-hooks"
 
-import { DELETE_COMMENT, DELETE_POST, GET_ALL_POSTS, GET_POST_BY_ID } from "../../graphql/posts"
+import { DELETE_POST, GET_ALL_POSTS, GET_POST_BY_ID } from "../../graphql/posts"
+import { DELETE_COMMENT } from "../../graphql/comments"
 
 import { Button, Confirm } from "semantic-ui-react"
 
@@ -46,12 +47,10 @@ const DeleteButton = ({ postId, commentId, history }) => {
   })
   const [isModalOpen, setModalOpen] = useState(false)
   const handleClick = (postId, commentId) => {
-    console.log("Comment Id", commentId)
-    if (commentId) {
-      console.log("Delete Comment")
+    const isComment = commentId !== undefined
+    if (isComment) {
       deleteComment()
     } else {
-      console.log("Delete Post")
       deletePost()
     }
     setModalOpen(false)
