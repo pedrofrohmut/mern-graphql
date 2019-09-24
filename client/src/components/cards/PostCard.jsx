@@ -7,7 +7,7 @@ import LikeButton from "../buttons/LikeButton"
 import CommentButton from "../buttons/CommentButton"
 import DeleteButton from "../buttons/DeleteButton"
 
-import { Card, Image } from "semantic-ui-react"
+import { Card, Image, Popup } from "semantic-ui-react"
 
 const PostCard = ({ post }) => {
   const { body, createdAt, id, userName, likesCount, commentsCount, likes } = post
@@ -34,9 +34,7 @@ const PostCard = ({ post }) => {
           userName={user ? user.userName : null}
         />
         <CommentButton postId={id} commentsCount={commentsCount} />
-        {user && user.userName && user.userName === userName && (
-          <DeleteButton postId={id} />
-        )}
+        {user && user.userName && user.userName === userName && <DeleteButton postId={id} />}
       </Card.Content>
     </Card>
   )

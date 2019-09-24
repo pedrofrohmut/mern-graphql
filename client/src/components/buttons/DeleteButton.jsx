@@ -5,9 +5,10 @@ import { useMutation } from "@apollo/react-hooks"
 import { DELETE_POST, GET_ALL_POSTS, GET_POST_BY_ID } from "../../graphql/posts"
 import { DELETE_COMMENT } from "../../graphql/comments"
 
-import { Button, Confirm } from "semantic-ui-react"
+import { Button, Confirm, Popup } from "semantic-ui-react"
 
 const DeleteButton = ({ postId, commentId, history }) => {
+  const isComment = commentId !== undefined
   const [deletePost] = useMutation(DELETE_POST, {
     update: (proxy, result) => {
       const query = GET_ALL_POSTS
@@ -47,7 +48,6 @@ const DeleteButton = ({ postId, commentId, history }) => {
   })
   const [isModalOpen, setModalOpen] = useState(false)
   const handleClick = (postId, commentId) => {
-    const isComment = commentId !== undefined
     if (isComment) {
       deleteComment()
     } else {
@@ -57,14 +57,20 @@ const DeleteButton = ({ postId, commentId, history }) => {
   }
   return (
     <>
-      <Button
-        color="orange"
-        content=""
-        icon="trash"
-        size="mini"
-        basic
-        label={{ basic: false, color: "orange", pointing: "left", content: "X" }}
-        onClick={() => setModalOpen(true)}
+      <Popup
+        content={`Delete this ${isComment ? "comment" : "post"}`}
+        inverted
+        trigger={
+          <Button
+            color="orange"
+            content=""
+            icon="trash"
+            size="mini"
+            basic
+            label={{ basic: false, color: "orange", pointing: "left", content: "X" }}
+            onClick={() => setModalOpen(true)}
+          />
+        }
       />
       <Confirm
         open={isModalOpen}
